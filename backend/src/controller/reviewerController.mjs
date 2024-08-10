@@ -22,10 +22,10 @@ function runAi (instruction, query, quiz_model){
       if(jsonFormat){
         res.status(200).send(jsonFormat)
       }else{
-        res.status(400).send({message : "JSON error in flash Cards"})
+        res.status(400).send({message : "JSON error"})
       }
     }catch(error){
-      res.status(400).send(error)
+      res.status(400).send({message : error.message})
     }
   }
 }
