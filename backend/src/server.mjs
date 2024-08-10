@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import reviewerRouter from "./routes/reviewerRoute.mjs";
+import importRouter from "./routes/importRoute.mjs";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/reviewer", reviewerRouter)
+app.use("/api/import", importRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import quizerModel from "../model/quizerModel.mjs";
+import reviewerModel from "../model/reviewerModel.mjs";
 import dotenv from "dotenv"
 
 dotenv.config()
@@ -17,7 +17,7 @@ function runAi (instruction, query, quiz_model){
 
       const prompt = `${req.body.prompt}\n\n${query}\n${quiz_model}`
       const result = await model.generateContent(prompt);
-      const response = await result.response;
+      const response = result.response;
       const jsonFormat = JSON.parse(response.text())
       if(jsonFormat){
         res.status(200).send(jsonFormat)
@@ -31,9 +31,9 @@ function runAi (instruction, query, quiz_model){
 }
 
 const reviewerController = {
-  flashCards : runAi(quizerModel.flashCards.systemInstruction, quizerModel.flashCards.query, quizerModel.flashCards.model),
-  fillBlanks : runAi(quizerModel.fillBlanks.systemInstruction, quizerModel.fillBlanks.query, quizerModel.fillBlanks.model),
-  multipleChoices : runAi(quizerModel.multipleChoices.systemInstruction, quizerModel.multipleChoices.query, quizerModel.multipleChoices.model)
+  flashCards : runAi(reviewerModel.flashCards.systemInstruction, reviewerModel.flashCards.query, reviewerModel.flashCards.model),
+  fillBlanks : runAi(reviewerModel.fillBlanks.systemInstruction, reviewerModel.fillBlanks.query, reviewerModel.fillBlanks.model),
+  multipleChoices : runAi(reviewerModel.multipleChoices.systemInstruction, reviewerModel.multipleChoices.query, reviewerModel.multipleChoices.model)
 }
 
 export default reviewerController;
