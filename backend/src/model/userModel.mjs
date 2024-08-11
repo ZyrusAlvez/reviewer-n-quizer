@@ -4,8 +4,11 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      unique : true,
       default : "",
+    },
+    email: {
+      type: String,
+      unique: true
     },
     password: {
       type: String,
@@ -20,7 +23,7 @@ userSchema.pre('save', function(next) {
     this.username = "Guest" + this._id.toString();
   }
   if (!this.password) {
-    this.password = "Guest" + this._id.toString();
+    this.password = this._id.toString();
   }
   next();
 });
