@@ -40,6 +40,20 @@ const multipleChoicesSchema = {
     "required": ["question", "choices", "answer"]
   }
 }
+
+const trueOrFalseSchema = {
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "question": {"type": "string"},
+      "answer": {"type": "boolean"}
+    },
+    "required": ["question", "answer"]
+  }
+};
+
+
 const start = "given the content above, "
 const end = " using this JSON schema:"
 
@@ -58,6 +72,11 @@ const reviewerModel = {
     systemInstruction : "direct question and multiple choices, answer must be within the multiple choices. provide many questions as possible",
     query : start + "get the thought and provide appropriate choices" + end,
     model : JSON.stringify(multipleChoicesSchema)
+  },
+  trueOrFalse :  {
+    systemInstruction : "generate question that can be answered by only true or false, give the correct must be only either true or false. provide many questions as possible",
+    query : start + "get the thought and provide question that can be solely answered either by true or false, also provide the correct answer to that question" + end,
+    model : JSON.stringify(trueOrFalseSchema)
   }
 }
 
