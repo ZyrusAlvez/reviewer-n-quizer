@@ -1,6 +1,7 @@
-import Main from "./pages/main/Main";
-import Log from "./pages/log-in/Log";
-import Sign from "./pages/sign-in/Sign";
+import Main from "./pages/Main";
+import Log from "./pages/Log";
+import Sign from "./pages/Sign";
+import Notes from "./pages/Notes";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css"
 
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/log",
     element: <Log />
+  },
+  {
+    path : "/notes",
+    element: <Notes />
   }
 ]);
 
