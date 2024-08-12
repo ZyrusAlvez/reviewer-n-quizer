@@ -5,8 +5,10 @@ const folderController = {
   initialSetUp: async (req, res) => {
     try {
       const result = await FolderModel.create({ userId: req.body.userId });
+      console.log(result)
       res.status(201).send(result);
     } catch (error) {
+      console.log(error.message)
       res.status(400).send({ message: error.message });
     }
   },
