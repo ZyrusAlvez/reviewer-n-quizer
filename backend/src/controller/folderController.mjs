@@ -15,20 +15,19 @@ const folderController = {
 
   addFolder: async (req, res) => {
     try {
-      let { userId, folder } = req.body;
-      folder || {}
-      
       const result = await FolderModel.findOneAndUpdate(
-        { userId: userId },                                 // using the userId to find the data
-        { $push: { folders: folder } },
-        { new: true, runValidators: true }
+        { userId: req.body.userId },                                 // using the userId to find the data
+        { $push: { folders: req.body.folder } },
+        { new: true}
       );
       if (!result){
+        console.log("error")
         res.status(400).send({message: "adding a folder failed"})
       }else{
         res.status(200).send(result);
       }
     } catch (error) {
+      console.log(error.message)
       res.status(400).send({ message: error.message });
     }
   },

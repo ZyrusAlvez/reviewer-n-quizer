@@ -2,6 +2,8 @@ import Main from "./pages/Main";
 import Log from "./pages/Log";
 import Sign from "./pages/Sign";
 import Notes from "./pages/Notes";
+import Folder from "./pages/Folder.jsx";
+import NotFound from "./pages/NotFound.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { UserDataProvider } from "./context/userDataContext";
 import { UserFolderProvider } from "./context/userFolderContext.jsx";
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
   {
     path: "/notes",
     element: <Notes />
+  },
+  {
+    path: "/folder/:id",
+    element: <Folder />
+  },
+  {
+    path: "*",
+    element: <NotFound />
   }
 ]);
 

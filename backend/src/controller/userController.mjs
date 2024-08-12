@@ -1,11 +1,13 @@
 import UserModel from "../model/userModel.mjs"
 import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
+import validator from "validator"
 
 const userController = {
 
   signin: async (request, response) => {
     try {
+      if (!validator.isEmail(request.body.email)) return res.status(400).send("Invalid email address");
+
       const salt = await bcrypt.genSalt()
       const hashedPassword = await bcrypt.hash(request.body.password, salt)
 
