@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose"
 import reviewerRouter from "./routes/reviewerRoute.mjs";
-import importRouter from "./routes/importRoute.mjs";
 import userRouter from "./routes/userRoute.mjs";
 import folderRouter from "./routes/folderRoute.mjs";
 import guestRouter from "./routes/guestRoute.mjs";
@@ -18,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/reviewer", reviewerRouter)
-app.use("/api/import", importRouter)
 app.use("/api/user", userRouter)
 app.use("/api/folder", folderRouter)
 app.use("/api/guest", guestRouter)
