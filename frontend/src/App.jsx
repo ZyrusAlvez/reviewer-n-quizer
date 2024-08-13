@@ -32,6 +32,10 @@ const router = createBrowserRouter([
     element: <Folder />
   },
   {
+    path: "/not-found",
+    element: <NotFound />
+  },
+  {
     path: "*",
     element: <NotFound />
   }

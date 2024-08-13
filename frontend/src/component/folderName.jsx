@@ -1,11 +1,13 @@
 import {useState, useContext} from 'react'
 import { UserDataContext } from '../context/userDataContext'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { UserFolderContext } from '../context/userFolderContext'
+import { useNavigate} from 'react-router-dom'
 import axios from "axios"
 
 
 const FolderName = ({divFolderNameDisplay, setDivFolderNameDisplay}) => {
   const {userData} = useContext(UserDataContext)
+  const {setUserFolder} = useContext(UserFolderContext)
   const [input, setInput] = useState("")
   const navigate = useNavigate()
 
@@ -13,6 +15,7 @@ const FolderName = ({divFolderNameDisplay, setDivFolderNameDisplay}) => {
     axios
     .post("http://localhost:5000/api/folder/add-folder", {userId: userData._id, folder: {name: input, reviewers: []}})
     .then((response) => {
+      setUserFolder(response)
       navigate("/folder/" + response.data.folders.at(-1)._id)
     })
     .catch((error) => {

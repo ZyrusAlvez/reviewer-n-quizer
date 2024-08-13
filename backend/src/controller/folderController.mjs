@@ -5,11 +5,26 @@ const folderController = {
   initialSetUp: async (req, res) => {
     try {
       const result = await FolderModel.create({ userId: req.body.userId });
-      console.log(result)
       res.status(201).send(result);
     } catch (error) {
       console.log(error.message)
       res.status(400).send({ message: error.message });
+    }
+  },
+
+  verifyFolder: async (req, res) => {
+    try{
+      console.log(req.params.id)
+      const result = await FolderModel.findOne({
+        "folders._id" : req.params.id
+      })
+      if (result){
+        res.status(200).send(result)
+      }else{
+        res.status(404).send("ID not valid")
+      }
+    }catch(error){
+      res.status(400).send({message: error.message})
     }
   },
 
@@ -21,13 +36,13 @@ const folderController = {
         { new: true}
       );
       if (!result){
-        console.log("error")
         res.status(400).send({message: "adding a folder failed"})
       }else{
+        console.log(result)
         res.status(200).send(result);
       }
     } catch (error) {
-      console.log(error.message)
+      console.log(error)
       res.status(400).send({ message: error.message });
     }
   },
