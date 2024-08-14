@@ -6,6 +6,7 @@ import reviewerRouter from "./routes/reviewerRoute.mjs";
 import userRouter from "./routes/userRoute.mjs";
 import folderRouter from "./routes/folderRoute.mjs";
 import guestRouter from "./routes/guestRoute.mjs";
+import youtubeImport from "./utils/youtubeImport.mjs";
 
 dotenv.config();
 
@@ -21,6 +22,10 @@ app.use("/api/user", userRouter)
 app.use("/api/folder", folderRouter)
 app.use("/api/guest", guestRouter)
 
+// utility functions
+app.post("/api/yturl", (req, res) => {
+  youtubeImport(req, res)
+})
 
 mongoose
   .connect(DATABASE)
