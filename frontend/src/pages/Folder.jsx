@@ -19,10 +19,16 @@ const Folder = () => {
         console.log(error);
       });
   }, [id, navigate]);
+  console.log(userFolder)
 
   return (
     <div>
-      
+      <button onClick={() => localStorage.clear()}>Summarize</button>
+      <button>Reviewer</button>
+      <button>Flash Cards</button>
+      <button onClick={() => navigate("/true-or-false/" + id)}>True or False</button>
+      <button>Multiple Questions</button>
+      <button>Fill in the Blanks</button>
     </div>
   );
 };

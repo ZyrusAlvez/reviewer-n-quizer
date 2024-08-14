@@ -15,6 +15,10 @@ const folderSchema = new mongoose.Schema(
             default: "My Folder",
             required: false
           },
+          material : {
+            type: String,
+            required: false
+          },
           reviewers: {
             type: [  // Specify the type as an array of objects
               {
