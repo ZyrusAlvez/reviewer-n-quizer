@@ -48,17 +48,14 @@ const folderController = {
     }
   },
   
-
+  // fixed! need the userId and the _id of the folder to push to the reviewer array
   addReviewerToFolder: async (req, res) => {
     try {
-      const { folderId, reviewer } = req.body;
-      reviewer || {};
-
       // Update the folder with the specified ID by adding the reviewer
       // must use strings when dealing with nested path within an array
       const updatedFolder = await FolderModel.findOneAndUpdate(
-        { "folders._id": folderId }, // Find the folder by ID within the folders array
-        { $push: { "folders.$.reviewers": reviewer } }, // Add the reviewer to the reviewers array within the matched folder
+        { userId: req.body.userId, "folders._id": req.body.folderId }, // Find the folder by ID within the folders array
+        { $push: { "folders.$.reviewers": req.body.reviewer } }, // Add the reviewer to the reviewers array within the matched folder
         { new: true, runValidators: true } // Return the updated document and validate
       );
 

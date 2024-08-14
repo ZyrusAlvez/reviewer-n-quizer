@@ -1,6 +1,19 @@
 import React, { useEffect } from 'react';
 
 const Loading = () => {
+  const loadingOverlay = {
+    width: '100vw',
+    height: '100vh',
+    background: 'rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+  }
+
   const loaderStyles = {
     width: '6em',
     height: '6em',
@@ -184,50 +197,52 @@ const Loading = () => {
   }, []);
 
   return (
-    <svg style={loaderStyles} width="240" height="240" viewBox="0 0 240 240">
-      <circle
-        style={ringAStyles}
-        cx="120"
-        cy="120"
-        r="105"
-        fill="none"
-        strokeWidth="20"
-        strokeDasharray="0 660"
-        strokeDashoffset="-330"
-        strokeLinecap="round"
-      />
-      <circle
-        style={ringBStyles}
-        cx="120"
-        cy="120"
-        r="35"
-        fill="none"
-        strokeWidth="20"
-        strokeDasharray="0 220"
-        strokeDashoffset="-110"
-        strokeLinecap="round"
-      />
-      <circle
-        style={ringCStyles}
-        cx="85"
-        cy="120"
-        r="70"
-        fill="none"
-        strokeWidth="20"
-        strokeDasharray="0 440"
-        strokeLinecap="round"
-      />
-      <circle
-        style={ringDStyles}
-        cx="155"
-        cy="120"
-        r="70"
-        fill="none"
-        strokeWidth="20"
-        strokeDasharray="0 440"
-        strokeLinecap="round"
-      />
-    </svg>
+    <div style={loadingOverlay}>
+      <svg style={loaderStyles} width="240" height="240" viewBox="0 0 240 240">
+        <circle
+          style={ringAStyles}
+          cx="120"
+          cy="120"
+          r="105"
+          fill="none"
+          strokeWidth="20"
+          strokeDasharray="0 660"
+          strokeDashoffset="-330"
+          strokeLinecap="round"
+        />
+        <circle
+          style={ringBStyles}
+          cx="120"
+          cy="120"
+          r="35"
+          fill="none"
+          strokeWidth="20"
+          strokeDasharray="0 220"
+          strokeDashoffset="-110"
+          strokeLinecap="round"
+        />
+        <circle
+          style={ringCStyles}
+          cx="85"
+          cy="120"
+          r="70"
+          fill="none"
+          strokeWidth="20"
+          strokeDasharray="0 440"
+          strokeLinecap="round"
+        />
+        <circle
+          style={ringDStyles}
+          cx="155"
+          cy="120"
+          r="70"
+          fill="none"
+          strokeWidth="20"
+          strokeDasharray="0 440"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
   );
 };
 

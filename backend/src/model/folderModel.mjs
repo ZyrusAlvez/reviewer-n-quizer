@@ -8,7 +8,7 @@ const folderSchema = new mongoose.Schema(
       required: true
     },
     folders: {  
-      type: [  // Specify the type as an array of objects
+      type: [
         {
           name: {
             type: String,
@@ -20,17 +20,12 @@ const folderSchema = new mongoose.Schema(
             required: false
           },
           reviewers: {
-            type: [  // Specify the type as an array of objects
+            type: [
               {
-                name: {
-                  type: String,
-                  default: "My Reviewer",
-                  required: false
-                },
                 classification: {
                   type: String,
                   required: false,
-                  enum: ["flashCards", "fillBlanks", "multipleChoices"]
+                  enum: ["flashCards", "fillBlanks", "multipleChoices", "trueOrFalse"]
                 },
                 json: {
                   type: mongoose.Schema.Types.Mixed,
