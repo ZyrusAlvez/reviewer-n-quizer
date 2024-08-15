@@ -1,41 +1,66 @@
-import axios from 'axios'
-import { useContext, useEffect, useState } from 'react'
-import { UserFolderContext } from '../../context/userFolderContext'
-import { useParams } from 'react-router-dom'
-import Loading from '../../component/Loading.jsx'
+import axios from 'axios';
+import { useContext, useState } from 'react';
+import { UserFolderContext } from '../../context/userFolderContext';
+import { useParams } from 'react-router-dom';
+import Loading from '../../component/Loading.jsx';
+import QuestionCard from '../../component/QuestionCard.jsx';
+import { UserDataContext } from '../../context/userDataContext.jsx';
 
 const TrueOrFalse = () => {
-  const { id } = useParams()
-  const { userFolder } = useContext(UserFolderContext)
-  const [data, setData] = useState(null)
+  const { id } = useParams();
+  const { userFolder, setUserFolder } = useContext(UserFolderContext);
+  const { userData } = useContext(UserDataContext)
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (Object.keys(userFolder).length){
-      const folder = userFolder.folders.find((e) => e._id === id)
+  function handleGenerate() {
+    setLoading(true);
+    if (Object.keys(userFolder).length) {
+      // Gets the material from the folder
+      const folder = userFolder.folders.find((e) => e._id === id);
       axios
-      .post("http://localhost:5000/api/reviewer/true-or-false", {prompt: folder.material})
-      .then((response) => {
-        setData(response.data)
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    }
-  }, [userFolder])
+        .post("http://localhost:5000/api/reviewer/true-or-false", { prompt: folder.material })
+        .then((response) => {
+          setData(response.data);
+          console.log({userId: userData._id, _id: folder._id, reviewer:{json: response.data, classification: "trueOrFalse"}})
 
+          // add the material to the context
+          axios
+          .post("http://localhost:5000/api/folder/add-reviewer", {userId: userData._id, folderId: folder._id, reviewer:{json: response.data, classification: "trueOrFalse"}})
+          .then((response) => {
+            setUserFolder(response.data)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false); // Stop loading in case of error
+        });
+    } else {
+      setLoading(false); // Ensure loading is stopped if the folder isn't found
+    }
+  }
 
   return (
-    !data ? <Loading /> : 
     <div>
-      <ol>
-        {data.map((e, i) => {
-          return <li key={i}>
-            {e.question} - {e.answer.toString()}
-            </li>})}
-      </ol>
+      <button onClick={handleGenerate}>Generate True or False Questions</button>
+      {loading ? (
+        <Loading />
+      ) : (
+        <ol>
+          {data &&
+            data.map((e, i) => (
+              <li key={i}>
+                <QuestionCard question={e.question} answer={e.answer.toString()} />
+              </li>
+            ))}
+        </ol>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default TrueOrFalse
+export default TrueOrFalse;

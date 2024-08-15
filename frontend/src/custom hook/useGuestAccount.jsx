@@ -4,14 +4,15 @@ import { UserDataContext } from "../context/userDataContext";
 import { UserFolderContext } from "../context/userFolderContext";
 
 const useGuestAccount = () => {
-  const { setUserData } = useContext(UserDataContext);
+  const { userData, setUserData } = useContext(UserDataContext);
   const { setUserFolder } = useContext(UserFolderContext);
 
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData"));
-    const storedUserFolder = JSON.parse(localStorage.getItem("userFolder"));
 
     if (!storedUserData) {
+      // creates new geust account + its initial folder
+
       axios
         .post("http://localhost:5000/api/guest/")
         .then((response) => {
@@ -41,9 +42,22 @@ const useGuestAccount = () => {
     } else {
       console.log("Loaded existing guest account from local storage.");
       setUserData(storedUserData);
-      setUserFolder(storedUserFolder);
     }
   }, []);
+
+  // fetch the user's folder from the database
+  useEffect(() => {
+    if (userData._id){
+      axios
+      .post("http://localhost:5000/api/folder/getFolder", {userId: userData._id})
+      .then((response) => {
+        setUserFolder(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
+  }, [userData])
 };
 
 export default useGuestAccount;

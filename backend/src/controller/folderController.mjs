@@ -11,6 +11,20 @@ const folderController = {
     }
   },
 
+  getFolder: async (req, res) => {
+    try{
+      console.log(req.body.userId)
+      const result = await FolderModel.findOne({userId: req.body.userId})
+      if (result){
+        res.status(200).send(result)
+      }else{
+        res.status(400).send({message: "folder not found for that userId"})
+      }
+    }catch(error){
+      res.status(400).send({message: error.message})
+    }
+  },
+
   verifyFolder: async (req, res) => {
     try {
       console.log(req.params.id);
@@ -50,6 +64,7 @@ const folderController = {
   
   // fixed! need the userId and the _id of the folder to push to the reviewer array
   addReviewerToFolder: async (req, res) => {
+    console.log(res.body)
     try {
       // Update the folder with the specified ID by adding the reviewer
       // must use strings when dealing with nested path within an array

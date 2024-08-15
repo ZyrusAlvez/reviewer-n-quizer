@@ -7,8 +7,6 @@ import axios from 'axios';
 const Folder = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { userData } = useContext(UserDataContext);
-  const { userFolder } = useContext(UserFolderContext);
 
   // makes sure that the route id is a valid folder
   useEffect(() => {
@@ -19,7 +17,6 @@ const Folder = () => {
         console.log(error);
       });
   }, [id, navigate]);
-  console.log(userFolder)
 
   return (
     <div>
