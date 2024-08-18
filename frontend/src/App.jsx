@@ -5,6 +5,7 @@ import Notes from "./pages/Import/Notes.jsx";
 import YoutubeURL from "./pages/Import/YoutubeURL.jsx";
 import Folder from "./pages/Folder.jsx";
 import TrueOrFalse from "./pages/Generate/TrueOrFalse.jsx";
+import FlashCards from "./pages/Generate/FlashCards.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { UserDataProvider } from "./context/userDataContext";
@@ -39,9 +40,14 @@ const router = createBrowserRouter([
     errorElement: <NotFound />
   },
   {
-    path: "/true-or-false/:id",
+    path: "folder/:id/true-or-false",
     element: <TrueOrFalse />,
     errorElement: <NotFound />
+  },
+  {
+    path: "folder/:id/flash-cards",
+    element: <FlashCards />,
+    errorElement: <NotFound />  
   },
   {
     path: "/not-found",

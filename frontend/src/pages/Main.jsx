@@ -31,6 +31,7 @@ const Main = () => {
       <button onClick={handleButtonClick}>
         Import Material
       </button>
+      <button onClick={() => localStorage.clear()}>Summarize</button>
       <ChooseImport divImportDisplay={divImportDisplay} />
     </div>
   );

@@ -5,7 +5,7 @@ import { UserFolderContext } from "../context/userFolderContext";
 
 const useGuestAccount = () => {
   const { userData, setUserData } = useContext(UserDataContext);
-  const { setUserFolder } = useContext(UserFolderContext);
+  const { userFolder, setUserFolder } = useContext(UserFolderContext);
 
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData"));
@@ -45,9 +45,9 @@ const useGuestAccount = () => {
     }
   }, []);
 
-  // fetch the user's folder from the database
+  // fetch the user's folder from the database if he's not new
   useEffect(() => {
-    if (userData._id){
+    if (userData._id && !userFolder){
       axios
       .post("http://localhost:5000/api/folder/getFolder", {userId: userData._id})
       .then((response) => {

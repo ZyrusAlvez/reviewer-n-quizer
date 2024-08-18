@@ -19,6 +19,7 @@ const FolderNaming = ({ divFolderNamingDisplay, setDivFolderNamingDisplay, mater
       handleSubmit(); // Only submit once
     }
   }, [submitted, material]);
+  
 
   const handleSubmit = () => {
     console.log(material)

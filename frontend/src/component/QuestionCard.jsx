@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useContext, useState } from 'react'
+import { UserFolderContext } from '../context/userFolderContext'
+import { findIndexUsingId, findIndexUsingClassification } from '../utils/findIndex'
 
-const QuestionCard = ({question, answer}) => {
+const QuestionCard = ({id, index, question, answer}) => {
+  const [localQuestion, setLocalQuestion] = useState(question);
+  const [localAnswer, setLocalAnswer] = useState(answer);
+
   const [show, setShow] = useState("*****")
 
   const [buttonText, setButtonText] = useState("show")
   const [editMode, setEditMode] = useState(false)
 
+  const [editAnswer, setEditAnswer] = useState("")
+  const [editQuestion, setEditQuestion] = useState(question)
+
+  const {userFolder} = useContext(UserFolderContext)
+
   function handleShow(){
     if(show === "*****"){
-      setShow(answer)
+      setShow(localAnswer)
       setButtonText("hide")
     }else{
       setShow("*****")
@@ -16,11 +27,30 @@ const QuestionCard = ({question, answer}) => {
     }
   }
 
+  function doneEdit(){
+    setEditMode(false)
+    setLocalAnswer(editAnswer)
+    setLocalQuestion(editQuestion)
+
+    if (show !== "*****"){
+      handleShow()
+    }
+
+    // just need to save this to the database
+    const reviewerId = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)]._id
+
+    axios
+    .post('http://localhost:5000/api/folder/edit-json', {folderId: id, reviewerId: reviewerId, questionIndex: index, newQuestion: editQuestion, newAnswer: editAnswer})
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
   return ( !editMode ? 
     <div style={{background: "#FAF9F6", boxShadow: "5px 5px 5x black", marginBottom: "10px"}}>
       <div style={{display: "flex"}}>
         <h3>Question:</h3>
-        <h3>{question}</h3>
+        <h3>{localQuestion}</h3>
         <button onClick={() => setEditMode(true)}>Edit</button>
         <button>Delete</button>
       </div>
@@ -34,14 +64,15 @@ const QuestionCard = ({question, answer}) => {
     <div style={{background: "#FAF9F6", boxShadow: "5px 5px 5x black", marginBottom: "10px"}}>
       <div style={{display: "flex"}}>
         <h3>Question:</h3>
-        <input value={question}/>
+        <input value={editQuestion} onChange={(e) => setEditQuestion(e.target.value)}/>
+        <button onClick={doneEdit}>done</button>
       </div>
       <div style={{display: "flex"}}>
         <h3>Answer:</h3>
-        <input type="radio" id="html" name="true or false" value="true" />
-        <label for="html">true</label>
-        <input type="radio" id="css" name="true or false" value="false" />
-        <label for="css">false</label>
+        <input type="radio" id="true" name="true or false" value="true" onClick={() => setEditAnswer("true")}/>
+        <label for="true">true</label>
+        <input type="radio" id="false" name="true or false" value="false" onClick={() => setEditAnswer("false")}/>  
+        <label for="false">false</label>
       </div>
     </div>
   )

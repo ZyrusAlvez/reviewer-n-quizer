@@ -50,7 +50,7 @@ const folderController = {
         { new: true }
       );
       if (!result) {
-        console.log("not saved")
+        console.log(result)
         res.status(400).send({ message: "Adding a folder failed" });
       } else {
         console.log(result);
@@ -83,6 +83,41 @@ const folderController = {
       res.status(400).send({ message: error.message });
     }
   },
+
+  editjson: async(req, res) => {
+    try {
+      const { folderId, reviewerId, questionIndex, newQuestion, newAnswer } = req.body;
+  
+      const result = await FolderModel.findOneAndUpdate(
+        { 
+          "folders._id": folderId,
+          "folders.reviewers._id": reviewerId
+        },
+        { 
+          $set: {
+            [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.question`]: newQuestion,
+            [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.answer`]: newAnswer
+          }
+        },
+        {
+          // in this way, we dont have to manually find the index
+          arrayFilters: [
+            { "folder._id": folderId }, //  filters the array of folders, finding the folder with the matching _id.
+            { "reviewer._id": reviewerId } // filters the array of reviewers within the matched folder, finding the reviewer with the matching _id.
+          ],
+          new: true // Return the updated document
+        }
+      );
+  
+      if (result) {
+        res.status(200).json({ success: true, data: result });
+      } else {
+        res.status(404).json({ success: false, message: "Folder or reviewer not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Server error", error });
+    }
+  }
 };
 
 export default folderController;

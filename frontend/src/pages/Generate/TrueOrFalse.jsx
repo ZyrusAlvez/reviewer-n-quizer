@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserFolderContext } from '../../context/userFolderContext';
 import { useParams } from 'react-router-dom';
 import Loading from '../../component/Loading.jsx';
 import QuestionCard from '../../component/QuestionCard.jsx';
 import { UserDataContext } from '../../context/userDataContext.jsx';
+import { findIndexUsingClassification, findIndexUsingId } from '../../utils/findIndex.js';
 
 const TrueOrFalse = () => {
   const { id } = useParams();
@@ -13,18 +14,38 @@ const TrueOrFalse = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if(userData._id){
+      axios
+      .post("http://localhost:5000/api/folder/getFolder", {userId: userData._id})
+      .then((response) => {
+
+        // this will use the recent saved true or false questions
+        setData(response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers[findIndexUsingClassification("trueOrFalse", response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers)].json)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
+  }, [userData])
+
+  // this will replace the current reviewer
   function handleGenerate() {
+    console.log(userFolder)
+
     setLoading(true);
     if (Object.keys(userFolder).length) {
+      console.log(userFolder)
       // Gets the material from the folder
       const folder = userFolder.folders.find((e) => e._id === id);
+      console.log(folder)
+      // generate the reviewer
       axios
         .post("http://localhost:5000/api/reviewer/true-or-false", { prompt: folder.material })
         .then((response) => {
+          console.log(id)
           setData(response.data);
-          console.log({userId: userData._id, _id: folder._id, reviewer:{json: response.data, classification: "trueOrFalse"}})
-
-          // add the material to the context
+          // add the generated reviewer to the folder
           axios
           .post("http://localhost:5000/api/folder/add-reviewer", {userId: userData._id, folderId: folder._id, reviewer:{json: response.data, classification: "trueOrFalse"}})
           .then((response) => {
@@ -54,7 +75,7 @@ const TrueOrFalse = () => {
           {data &&
             data.map((e, i) => (
               <li key={i}>
-                <QuestionCard question={e.question} answer={e.answer.toString()} />
+                <QuestionCard id={id} index={i} question={e.question} answer={e.answer.toString()} />
               </li>
             ))}
         </ol>

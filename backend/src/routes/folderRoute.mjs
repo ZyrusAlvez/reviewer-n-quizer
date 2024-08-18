@@ -8,5 +8,6 @@ folderRouter.post("/getFolder", folderController.getFolder);
 folderRouter.get("/verify/:id", folderController.verifyFolder);
 folderRouter.post("/add-folder", folderController.addFolder);
 folderRouter.post("/add-reviewer", folderController.addReviewerToFolder);
+folderRouter.post("/edit-json", folderController.editjson)
 
 export default folderRouter;
