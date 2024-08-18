@@ -14,6 +14,8 @@ const TrueOrFalse = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const reviewerId = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)]._id
+  console.log(userFolder.userId)
   useEffect(() => {
     if(userData._id){
       axios
@@ -35,11 +37,14 @@ const TrueOrFalse = () => {
     if (Object.keys(userFolder).length) {
       // Gets the material from the folder
       const folder = userFolder.folders.find((e) => e._id === id);
+      
+
       // generate the reviewer
       axios
         .post("http://localhost:5000/api/reviewer/true-or-false", { prompt: folder.material })
         .then((response) => {
           setData(response.data);
+
           // add the generated reviewer to the folder
           axios
           .post("http://localhost:5000/api/folder/add-reviewer", {userId: userData._id, folderId: folder._id, reviewer:{json: response.data, classification: "trueOrFalse"}})
@@ -60,9 +65,22 @@ const TrueOrFalse = () => {
     }
   }
 
+  function handleAdd(){
+    const reviewerId = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)]._id
+    axios
+    .post("http://localhost:5000/api/folder/add-question", { userId: userFolder.userId, folderId: id, reviewerId, newQuestionAnswer: {question: "helo", answer: true}})
+    .then((response) => {
+      setUserFolder(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
   return (
     <div>
       <button onClick={handleGenerate}>Generate True or False Questions</button>
+      <button onClick={handleAdd}>Add new Cards</button>
       {loading ? (
         <Loading />
       ) : (

@@ -154,6 +154,37 @@ const folderController = {
     } catch (error) {
       res.status(400).send({ message: error.message });
     }
+  },
+
+  addQuestion : async (req, res) => {
+    try {
+      const { userId, folderId, reviewerId, newQuestionAnswer } = req.body;
+      console.log(req.body)
+      const result = await FolderModel.findOneAndUpdate(
+        {
+          userId: userId, 
+          "folders._id": folderId,
+          "folders.reviewers._id": reviewerId
+        },
+        {
+          $push: {
+            "folders.$.reviewers.$[reviewer].json": newQuestionAnswer
+          }
+        },
+        {
+          arrayFilters: [{ "reviewer._id": reviewerId }],
+          new: true
+        }
+      );
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res.status(400).send({ message: "Failed to add question" });
+      }
+      
+    } catch (error) {
+      res.status(400).send({ message: error.message });
+    }
   }
 };
 
