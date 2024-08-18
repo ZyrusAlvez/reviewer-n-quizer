@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserFolderContext } from '../context/userFolderContext'
 import { findIndexUsingId, findIndexUsingClassification } from '../utils/findIndex'
 
@@ -15,7 +15,12 @@ const QuestionCard = ({id, index, question, answer}) => {
   const [editAnswer, setEditAnswer] = useState("")
   const [editQuestion, setEditQuestion] = useState(question)
 
-  const {userFolder} = useContext(UserFolderContext)
+  const {userFolder, setUserFolder} = useContext(UserFolderContext)
+
+  useEffect(() => {
+    setLocalQuestion(question)
+    setLocalAnswer(answer)
+  }, [question])
 
   function handleShow(){
     if(show === "*****"){
@@ -28,12 +33,17 @@ const QuestionCard = ({id, index, question, answer}) => {
   }
 
   function handleDelete(){
-    console.log(userFolder)
     const reviewerId = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)]._id
     const questionToRemove = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)].json[index].question
-    console.log(questionToRemove)
-    return
-
+    axios
+    .post('http://localhost:5000/api/folder/remove-question', {folderId: id, reviewerId, questionToRemove})
+    .then((response) => {
+      console.log(response.data)
+      setUserFolder(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   function doneEdit(){
@@ -50,6 +60,9 @@ const QuestionCard = ({id, index, question, answer}) => {
 
     axios
     .post('http://localhost:5000/api/folder/edit-json', {folderId: id, reviewerId: reviewerId, questionIndex: index, newQuestion: editQuestion, newAnswer: editAnswer})
+    .then((response) => {
+      setUserFolder(response.data.data)
+    })
     .catch((error) => {
       console.log(error)
     })
@@ -79,9 +92,9 @@ const QuestionCard = ({id, index, question, answer}) => {
       <div style={{display: "flex"}}>
         <h3>Answer:</h3>
         <input type="radio" id="true" name="true or false" value="true" onClick={() => setEditAnswer("true")}/>
-        <label for="true">true</label>
+        <label htmlFor="true">true</label>
         <input type="radio" id="false" name="true or false" value="false" onClick={() => setEditAnswer("false")}/>  
-        <label for="false">false</label>
+        <label htmlFor="false">false</label>
       </div>
     </div>
   )

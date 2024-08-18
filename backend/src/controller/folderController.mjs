@@ -12,16 +12,16 @@ const folderController = {
   },
 
   getFolder: async (req, res) => {
-    try{
-      console.log(req.body.userId)
-      const result = await FolderModel.findOne({userId: req.body.userId})
-      if (result){
-        res.status(200).send(result)
-      }else{
-        res.status(400).send({message: "folder not found for that userId"})
+    try {
+      console.log(req.body.userId);
+      const result = await FolderModel.findOne({ userId: req.body.userId });
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res.status(400).send({ message: "folder not found for that userId" });
       }
-    }catch(error){
-      res.status(400).send({message: error.message})
+    } catch (error) {
+      res.status(400).send({ message: error.message });
     }
   },
 
@@ -50,7 +50,7 @@ const folderController = {
         { new: true }
       );
       if (!result) {
-        console.log(result)
+        console.log(result);
         res.status(400).send({ message: "Adding a folder failed" });
       } else {
         console.log(result);
@@ -61,10 +61,10 @@ const folderController = {
       res.status(400).send({ message: error.message });
     }
   },
-  
+
   // fixed! need the userId and the _id of the folder to push to the reviewer array
   addReviewerToFolder: async (req, res) => {
-    console.log(res.body)
+    console.log(res.body);
     try {
       // Update the folder with the specified ID by adding the reviewer
       // must use strings when dealing with nested path within an array
@@ -84,38 +84,75 @@ const folderController = {
     }
   },
 
-  editjson: async(req, res) => {
+  editjson: async (req, res) => {
     try {
-      const { folderId, reviewerId, questionIndex, newQuestion, newAnswer } = req.body;
-  
+      const { folderId, reviewerId, questionIndex, newQuestion, newAnswer } =
+        req.body;
+
       const result = await FolderModel.findOneAndUpdate(
-        { 
+        {
           "folders._id": folderId,
-          "folders.reviewers._id": reviewerId
+          "folders.reviewers._id": reviewerId,
         },
-        { 
+        {
           $set: {
-            [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.question`]: newQuestion,
-            [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.answer`]: newAnswer
-          }
+            [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.question`]:
+              newQuestion,
+            [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.answer`]:
+              newAnswer,
+          },
         },
         {
           // in this way, we dont have to manually find the index
           arrayFilters: [
             { "folder._id": folderId }, //  filters the array of folders, finding the folder with the matching _id.
-            { "reviewer._id": reviewerId } // filters the array of reviewers within the matched folder, finding the reviewer with the matching _id.
+            { "reviewer._id": reviewerId }, // filters the array of reviewers within the matched folder, finding the reviewer with the matching _id.
           ],
-          new: true // Return the updated document
+          new: true, // Return the updated document
         }
       );
-  
+
       if (result) {
         res.status(200).json({ success: true, data: result });
       } else {
-        res.status(404).json({ success: false, message: "Folder or reviewer not found" });
+        res
+          .status(404)
+          .json({ success: false, message: "Folder or reviewer not found" });
       }
     } catch (error) {
       res.status(500).json({ success: false, message: "Server error", error });
+    }
+  },
+
+  deleteQuestion: async (req, res) => {
+    try {
+      // Use findOneAndUpdate to pull the specific question-answer pair and return the updated document
+      const updatedDocument = await FolderModel.findOneAndUpdate(
+        {
+          "folders._id": req.body.folderId,
+          "folders.reviewers._id": req.body.reviewerId,
+        },
+        {
+          $pull: {
+            "folders.$.reviewers.$[reviewer].json": {
+              question: req.body.questionToRemove,
+            },
+          },
+        },
+        {
+          arrayFilters: [{ "reviewer._id": req.body.reviewerId }],
+          new: true,  // This will return the updated document
+        }
+      );
+  
+      if (updatedDocument) {
+        res.status(200).send(updatedDocument);
+      } else {
+        res.status(400).send({ message: "Delete question failed" });
+      }
+      
+    } catch (error) {
+      res.status(400).send({ message: error.message });
     }
   }
 };

@@ -19,7 +19,7 @@ const TrueOrFalse = () => {
       axios
       .post("http://localhost:5000/api/folder/getFolder", {userId: userData._id})
       .then((response) => {
-
+        console.log(response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers[findIndexUsingClassification("trueOrFalse", response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers)].json)
         // this will use the recent saved true or false questions
         setData(response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers[findIndexUsingClassification("trueOrFalse", response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers)].json)
       })
@@ -27,23 +27,18 @@ const TrueOrFalse = () => {
         console.log(error)
       })
     }
-  }, [userData])
+  }, [userData, setUserFolder, userFolder])
 
   // this will replace the current reviewer
   function handleGenerate() {
-    console.log(userFolder)
-
     setLoading(true);
     if (Object.keys(userFolder).length) {
-      console.log(userFolder)
       // Gets the material from the folder
       const folder = userFolder.folders.find((e) => e._id === id);
-      console.log(folder)
       // generate the reviewer
       axios
         .post("http://localhost:5000/api/reviewer/true-or-false", { prompt: folder.material })
         .then((response) => {
-          console.log(id)
           setData(response.data);
           // add the generated reviewer to the folder
           axios

@@ -9,5 +9,6 @@ folderRouter.get("/verify/:id", folderController.verifyFolder);
 folderRouter.post("/add-folder", folderController.addFolder);
 folderRouter.post("/add-reviewer", folderController.addReviewerToFolder);
 folderRouter.post("/edit-json", folderController.editjson)
+folderRouter.post("/remove-question", folderController.deleteQuestion)
 
 export default folderRouter;
