@@ -27,6 +27,15 @@ const QuestionCard = ({id, index, question, answer}) => {
     }
   }
 
+  function handleDelete(){
+    console.log(userFolder)
+    const reviewerId = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)]._id
+    const questionToRemove = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)].json[index].question
+    console.log(questionToRemove)
+    return
+
+  }
+
   function doneEdit(){
     setEditMode(false)
     setLocalAnswer(editAnswer)
@@ -52,7 +61,7 @@ const QuestionCard = ({id, index, question, answer}) => {
         <h3>Question:</h3>
         <h3>{localQuestion}</h3>
         <button onClick={() => setEditMode(true)}>Edit</button>
-        <button>Delete</button>
+        <button onClick={handleDelete}>Delete</button>
       </div>
       <div style={{display: "flex"}}>
         <h3>Answer:</h3>
