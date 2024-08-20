@@ -30,6 +30,8 @@ const FolderNaming = ({ divFolderNamingDisplay, setDivFolderNamingDisplay, mater
         folder: { name: input, material: material, reviewers: [] },
       })
       .then((response) => {
+        console.log(response.data)
+        // save the material or the text that will be use to generate the reviewers
         setUserFolder(response.data);
         setLoading(false); // Reset loading state
         setSubmitted(false); // Reset submitted state

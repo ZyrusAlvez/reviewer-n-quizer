@@ -1,59 +1,65 @@
-import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
-import { UserFolderContext } from '../../context/userFolderContext';
-import { useParams } from 'react-router-dom';
-import Loading from '../../component/Loading.jsx';
-import QuestionCard from '../../component/QuestionCard.jsx';
-import { UserDataContext } from '../../context/userDataContext.jsx';
-import { findIndexUsingClassification, findIndexUsingId } from '../../utils/findIndex.js';
+import axios from "axios";
+import { useContext, useEffect, useRef, useState } from "react";
+import { UserFolderContext } from "../../context/userFolderContext";
+import { useParams } from "react-router-dom";
+import Loading from "../../component/Loading.jsx";
+import QuestionCard from "../../component/QuestionCard.jsx";
+import { UserDataContext } from "../../context/userDataContext.jsx";
+import { findReviewerId, findReviewerJson } from "../../utils/findReviewer.js";
 
 const TrueOrFalse = () => {
-  const { id } = useParams();
+  const { folderId } = useParams();
   const { userFolder, setUserFolder } = useContext(UserFolderContext);
-  const { userData } = useContext(UserDataContext)
-  const [data, setData] = useState(null);
+  const { userData } = useContext(UserDataContext);
   const [loading, setLoading] = useState(false);
-
-  const reviewerId = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)]._id
-  console.log(userFolder.userId)
+  const [data, setData] = useState(null); // this will be used to show the cards
+  
+  // problem: there would be an error if there is no recent saved
   useEffect(() => {
-    if(userData._id){
+    if (userData._id){
       axios
-      .post("http://localhost:5000/api/folder/getFolder", {userId: userData._id})
-      .then((response) => {
-        console.log(response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers[findIndexUsingClassification("trueOrFalse", response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers)].json)
-        // this will use the recent saved true or false questions
-        setData(response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers[findIndexUsingClassification("trueOrFalse", response.data.folders[findIndexUsingId(id, response.data.folders)].reviewers)].json)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .post("http://localhost:5000/api/folder/getFolder", {
+          userId: userData._id,
+        })
+        .then((response) => {
+          // this will use the recent saved true or false questions
+          setData(findReviewerJson(response.data, folderId, "trueOrFalse"));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }, [userData, setUserFolder, userFolder])
+  }, [userData, setUserFolder, userFolder]);
 
   // this will replace the current reviewer
   function handleGenerate() {
+    console.log(userFolder)
     setLoading(true);
     if (Object.keys(userFolder).length) {
       // Gets the material from the folder
-      const folder = userFolder.folders.find((e) => e._id === id);
-      
+      const folder = userFolder.folders.find((e) => e._id === folderId);
 
       // generate the reviewer
       axios
-        .post("http://localhost:5000/api/reviewer/true-or-false", { prompt: folder.material })
+        .post("http://localhost:5000/api/reviewer/true-or-false", {
+          prompt: folder.material,
+        })
         .then((response) => {
           setData(response.data);
 
           // add the generated reviewer to the folder
           axios
-          .post("http://localhost:5000/api/folder/add-reviewer", {userId: userData._id, folderId: folder._id, reviewer:{json: response.data, classification: "trueOrFalse"}})
-          .then((response) => {
-            setUserFolder(response.data)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+            .post("http://localhost:5000/api/folder/add-reviewer", {
+              userId: userFolder.userId,
+              folderId: folderId,
+              reviewer: { json: response.data, classification: "trueOrFalse" },
+            })
+            .then((response) => {
+              setUserFolder(response.data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
           setLoading(false);
         })
         .catch((error) => {
@@ -65,16 +71,20 @@ const TrueOrFalse = () => {
     }
   }
 
-  function handleAdd(){
-    const reviewerId = userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers[findIndexUsingClassification("trueOrFalse", userFolder.folders[findIndexUsingId(id, userFolder.folders)].reviewers)]._id
+  function handleAdd() {
     axios
-    .post("http://localhost:5000/api/folder/add-question", { userId: userFolder.userId, folderId: id, reviewerId, newQuestionAnswer: {question: "helo", answer: true}})
-    .then((response) => {
-      setUserFolder(response.data)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+      .post("http://localhost:5000/api/folder/add-question", {
+        userId: userFolder.userId,
+        folderId: folderId,
+        reviewerId: findReviewerId(userFolder, folderId, "trueOrFalse"),
+        newQuestionAnswer: { question: "helo", answer: true },
+      })
+      .then((response) => {
+        setUserFolder(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -88,7 +98,13 @@ const TrueOrFalse = () => {
           {data &&
             data.map((e, i) => (
               <li key={i}>
-                <QuestionCard id={id} index={i} question={e.question} answer={e.answer.toString()} />
+                <QuestionCard
+                  folderId={folderId}
+                  reviewerId={findReviewerId(userFolder, folderId, "trueOrFalse")}
+                  index={i}
+                  question={e.question}
+                  answer={e.answer.toString()}
+                />
               </li>
             ))}
         </ol>

@@ -35,17 +35,17 @@ const router = createBrowserRouter([
     element: <YoutubeURL />
   },
   {
-    path: "/folder/:id",
+    path: "/folder/:folderId",
     element: <Folder />,
     errorElement: <NotFound />
   },
   {
-    path: "folder/:id/true-or-false",
+    path: "folder/:folderId/true-or-false",
     element: <TrueOrFalse />,
     errorElement: <NotFound />
   },
   {
-    path: "folder/:id/flash-cards",
+    path: "folder/:folderId/flash-cards",
     element: <FlashCards />,
     errorElement: <NotFound />  
   },

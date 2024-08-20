@@ -28,7 +28,7 @@ const useGuestAccount = () => {
             })
             .then((response) => {
               const userFolder = response.data;
-              setUserFolder(response.data);
+              setUserFolder(userFolder);
               localStorage.setItem("userFolder", JSON.stringify(userFolder));
               console.log("Initialized the user's folder");
             })
