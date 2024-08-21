@@ -4,32 +4,35 @@ import { UserFolderContext } from "../../context/userFolderContext";
 import { useParams } from "react-router-dom";
 import Loading from "../../component/Loading.jsx";
 import QuestionCard from "../../component/QuestionCard.jsx";
-import { UserDataContext } from "../../context/userDataContext.jsx";
 import { findReviewerId, findReviewerJson } from "../../utils/findReviewer.js";
 
 const TrueOrFalse = () => {
   const { folderId } = useParams();
   const { userFolder, setUserFolder } = useContext(UserFolderContext);
-  const { userData } = useContext(UserDataContext);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null); // this will be used to show the cards
+
+  const generated = useRef(false)
   
   // problem: there would be an error if there is no recent saved
+  // the passed props userFolder in Card component is not updated
   useEffect(() => {
-    if (userData._id){
+    if (userFolder.userId) {
       axios
         .post("http://localhost:5000/api/folder/getFolder", {
-          userId: userData._id,
+          userId: userFolder.userId,
         })
         .then((response) => {
           // this will use the recent saved true or false questions
           setData(findReviewerJson(response.data, folderId, "trueOrFalse"));
+          generated.current = true
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  }, [userData, setUserFolder, userFolder]);
+  }, [userFolder]);
+
 
   // this will replace the current reviewer
   function handleGenerate() {
@@ -56,6 +59,7 @@ const TrueOrFalse = () => {
             })
             .then((response) => {
               setUserFolder(response.data);
+              generated.current = true
             })
             .catch((error) => {
               console.log(error);
@@ -95,7 +99,7 @@ const TrueOrFalse = () => {
         <Loading />
       ) : (
         <ol>
-          {data &&
+          {data && generated.current &&
             data.map((e, i) => (
               <li key={i}>
                 <QuestionCard

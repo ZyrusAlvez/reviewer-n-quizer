@@ -18,6 +18,7 @@ function findIndexUsingClassification(classification, folders) {
 }
 
 export function findReviewerId(userFolder, folderId, classification) {
+  console.log(userFolder)
   return userFolder.folders[findIndexUsingId(folderId, userFolder.folders)]
     .reviewers[
     findIndexUsingClassification(
@@ -29,6 +30,7 @@ export function findReviewerId(userFolder, folderId, classification) {
 }
 
 export function findReviewerJson(userFolder, folderId, classification) {
+  console.log(userFolder)
   return userFolder.folders[findIndexUsingId(folderId, userFolder.folders)]
     .reviewers[
     findIndexUsingClassification(
