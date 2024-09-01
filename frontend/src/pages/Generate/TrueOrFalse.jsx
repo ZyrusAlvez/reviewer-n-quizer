@@ -15,8 +15,6 @@ const TrueOrFalse = () => {
 
   const generated = useRef(false)
   
-  // problem: there would be an error if there is no recent saved
-  // the passed props userFolder in Card component is not updated
   useEffect(() => {
     if (userFolder.userId) {
       axios
@@ -77,28 +75,13 @@ const TrueOrFalse = () => {
     }
   }
 
-  function handleAdd() {
-    navigate("add")
-
-    // axios
-    //   .post("http://localhost:5000/api/folder/add-question", {
-    //     userId: userFolder.userId,
-    //     folderId: folderId,
-    //     reviewerId: findReviewerId(userFolder, folderId, "trueOrFalse"),
-    //     newQuestionAnswer: { question: "helo", answer: true },
-    //   })
-    //   .then((response) => {
-    //     setUserFolder(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  }
-
   return (
     <div>
-      <button onClick={handleGenerate}>Generate True or False Questions</button>
-      <button onClick={handleAdd}>Add new Cards</button>
+      <div>
+        <button onClick={handleGenerate}>Generate True or False Questions</button>
+        <button onClick={() => navigate("add")}>Add new Cards</button>
+        <button onClick={() => navigate("play")}>Play</button>
+      </div>
       {loading ? (
         <Loading />
       ) : (

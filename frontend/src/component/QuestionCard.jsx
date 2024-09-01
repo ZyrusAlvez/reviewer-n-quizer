@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserFolderContext } from "../context/userFolderContext";
 import { findReviewerJson } from "../utils/findReviewer";
 
@@ -11,7 +11,7 @@ const QuestionCard = ({
   answer,
   why,
 }) => {
-  // to re-assignment the immutable answer and question props
+  // to re-assign the immutable answer and question props
   const [localQuestion, setLocalQuestion] = useState(question);
   const [localAnswer, setLocalAnswer] = useState(answer);
   const [localWhy, setLocalWhy] = useState(why);
@@ -21,7 +21,7 @@ const QuestionCard = ({
   const [whyDisplay, setWhyDisplay] = useState("none");
 
   const [editMode, setEditMode] = useState(false);
-  const [editAnswer, setEditAnswer] = useState("");
+  const [editAnswer, setEditAnswer] = useState(answer); // Initialize with current answer
   const [editQuestion, setEditQuestion] = useState(question);
   const [editWhy, setEditWhy] = useState(localWhy);
 
@@ -30,7 +30,7 @@ const QuestionCard = ({
   useEffect(() => {
     setLocalQuestion(question);
     setLocalAnswer(answer);
-  }, [question]);
+  }, [question, answer]);
 
   function handleShow() {
     if (show === "*****") {
@@ -66,12 +66,11 @@ const QuestionCard = ({
       });
   }
 
-  // we initially shows to the user their edited content and then use the response only to update our foler copy from the api
   function doneEdit() {
     setEditMode(false);
-    setLocalAnswer(editAnswer)
-    setLocalQuestion(editQuestion)
-    setLocalWhy(editWhy)
+    setLocalAnswer(editAnswer);
+    setLocalQuestion(editQuestion);
+    setLocalWhy(editWhy);
 
     if (show !== "*****") {
       handleShow();
@@ -115,7 +114,7 @@ const QuestionCard = ({
         <button onClick={handleShow}>{buttonText}</button>
       </div>
       <div style={{ display: whyDisplay }}>
-        {localAnswer == "false" && <div><strong>Why: </strong> {localWhy} </div>}
+        {localAnswer === "false" && <div><strong>Why: </strong> {localWhy} </div>}
       </div>
     </div>
   ) : (
@@ -132,32 +131,34 @@ const QuestionCard = ({
           value={editQuestion}
           onChange={(e) => setEditQuestion(e.target.value)}
         />
-        <button onClick={doneEdit}>done</button>
+        <button onClick={doneEdit}>Done</button>
       </div>
       <div style={{ display: "flex" }}>
         <h3>Answer:</h3>
         <input
           type="radio"
-          id="true"
-          name="true or false"
+          id={`true-${index}`}
+          name={`true-or-false-${index}`}
           value="true"
-          onClick={() => setEditAnswer("true")}
+          checked={editAnswer === "true"}
+          onChange={() => setEditAnswer("true")}
         />
-        <label htmlFor="true">true</label>
+        <label htmlFor={`true-${index}`}>true</label>
+
         <input
           type="radio"
-          id="false"
-          name="true or false"
+          id={`false-${index}`}
+          name={`true-or-false-${index}`}
           value="false"
-          onClick={() => setEditAnswer("false")}
+          checked={editAnswer === "false"}
+          onChange={() => setEditAnswer("false")}
         />
-        <label htmlFor="false">false</label>
+        <label htmlFor={`false-${index}`}>false</label>
       </div>
       <div>
-        
-        {editAnswer == "false" && (
+        {editAnswer === "false" && (
           <div>
-            <strong>Why:</strong> 
+            <strong>Why:</strong>
             <input
               value={editWhy}
               onChange={(e) => setEditWhy(e.target.value)}
