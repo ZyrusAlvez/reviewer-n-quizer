@@ -86,7 +86,7 @@ const folderController = {
 
   editjson: async (req, res) => {
     try {
-      const { folderId, reviewerId, questionIndex, newQuestion, newAnswer } =
+      const { folderId, reviewerId, questionIndex, newQuestion, newAnswer, newWhy } =
         req.body;
 
       const result = await FolderModel.findOneAndUpdate(
@@ -100,6 +100,8 @@ const folderController = {
               newQuestion,
             [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.answer`]:
               newAnswer,
+            [`folders.$[folder].reviewers.$[reviewer].json.${questionIndex}.why`]:
+              newWhy,
           },
         },
         {

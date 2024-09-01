@@ -12,6 +12,7 @@ import { UserDataProvider } from "./context/userDataContext";
 import { UserFolderProvider } from "./context/userFolderContext.jsx";
 import useGuestAccount from "./custom hook/useGuestAccount.jsx";
 import "./App.css";
+import AddTrueOrFalse from "./pages/Add/AddTrueOrFalse.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
     path: "folder/:folderId/true-or-false",
     element: <TrueOrFalse />,
     errorElement: <NotFound />
+  },
+  {
+    path: "folder/:folderId/true-or-false/add",
+    element: <AddTrueOrFalse />
   },
   {
     path: "folder/:folderId/flash-cards",

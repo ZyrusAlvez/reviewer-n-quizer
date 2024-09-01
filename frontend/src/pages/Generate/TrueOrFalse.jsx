@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { UserFolderContext } from "../../context/userFolderContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../component/Loading.jsx";
 import QuestionCard from "../../component/QuestionCard.jsx";
 import { findReviewerId, findReviewerJson } from "../../utils/findReviewer.js";
@@ -11,6 +11,7 @@ const TrueOrFalse = () => {
   const { userFolder, setUserFolder } = useContext(UserFolderContext);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null); // this will be used to show the cards
+  const navigate = useNavigate()
 
   const generated = useRef(false)
   
@@ -48,6 +49,7 @@ const TrueOrFalse = () => {
           prompt: folder.material,
         })
         .then((response) => {
+          console.log(response.data)
           setData(response.data);
 
           // add the generated reviewer to the folder
@@ -62,7 +64,7 @@ const TrueOrFalse = () => {
               generated.current = true
             })
             .catch((error) => {
-              console.log(error);
+              console.log(error); 
             });
           setLoading(false);
         })
@@ -76,19 +78,21 @@ const TrueOrFalse = () => {
   }
 
   function handleAdd() {
-    axios
-      .post("http://localhost:5000/api/folder/add-question", {
-        userId: userFolder.userId,
-        folderId: folderId,
-        reviewerId: findReviewerId(userFolder, folderId, "trueOrFalse"),
-        newQuestionAnswer: { question: "helo", answer: true },
-      })
-      .then((response) => {
-        setUserFolder(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    navigate("add")
+
+    // axios
+    //   .post("http://localhost:5000/api/folder/add-question", {
+    //     userId: userFolder.userId,
+    //     folderId: folderId,
+    //     reviewerId: findReviewerId(userFolder, folderId, "trueOrFalse"),
+    //     newQuestionAnswer: { question: "helo", answer: true },
+    //   })
+    //   .then((response) => {
+    //     setUserFolder(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 
   return (
@@ -108,6 +112,7 @@ const TrueOrFalse = () => {
                   index={i}
                   question={e.question}
                   answer={e.answer.toString()}
+                  why={e.why}
                 />
               </li>
             ))}

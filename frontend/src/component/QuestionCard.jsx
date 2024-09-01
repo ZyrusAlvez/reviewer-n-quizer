@@ -3,17 +3,28 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserFolderContext } from "../context/userFolderContext";
 import { findReviewerJson } from "../utils/findReviewer";
 
-const QuestionCard = ({ folderId, reviewerId, index, question, answer }) => {
-
+const QuestionCard = ({
+  folderId,
+  reviewerId,
+  index,
+  question,
+  answer,
+  why,
+}) => {
   // to re-assignment the immutable answer and question props
   const [localQuestion, setLocalQuestion] = useState(question);
   const [localAnswer, setLocalAnswer] = useState(answer);
+  const [localWhy, setLocalWhy] = useState(why);
 
   const [show, setShow] = useState("*****");
   const [buttonText, setButtonText] = useState("show");
+  const [whyDisplay, setWhyDisplay] = useState("none");
+
   const [editMode, setEditMode] = useState(false);
   const [editAnswer, setEditAnswer] = useState("");
   const [editQuestion, setEditQuestion] = useState(question);
+  const [editWhy, setEditWhy] = useState(localWhy);
+
   const { userFolder, setUserFolder } = useContext(UserFolderContext);
 
   useEffect(() => {
@@ -25,14 +36,20 @@ const QuestionCard = ({ folderId, reviewerId, index, question, answer }) => {
     if (show === "*****") {
       setShow(localAnswer);
       setButtonText("hide");
+      setWhyDisplay("block");
     } else {
       setShow("*****");
       setButtonText("show");
+      setWhyDisplay("none");
     }
   }
 
   function handleDelete() {
-    const questionToRemove = findReviewerJson(userFolder, folderId, "trueOrFalse")[index].question;
+    const questionToRemove = findReviewerJson(
+      userFolder,
+      folderId,
+      "trueOrFalse"
+    )[index].question;
 
     axios
       .post("http://localhost:5000/api/folder/remove-question", {
@@ -52,8 +69,9 @@ const QuestionCard = ({ folderId, reviewerId, index, question, answer }) => {
   // we initially shows to the user their edited content and then use the response only to update our foler copy from the api
   function doneEdit() {
     setEditMode(false);
-    setLocalAnswer(editAnswer);
-    setLocalQuestion(editQuestion);
+    setLocalAnswer(editAnswer)
+    setLocalQuestion(editQuestion)
+    setLocalWhy(editWhy)
 
     if (show !== "*****") {
       handleShow();
@@ -66,9 +84,11 @@ const QuestionCard = ({ folderId, reviewerId, index, question, answer }) => {
         questionIndex: index,
         newQuestion: editQuestion,
         newAnswer: editAnswer,
+        newWhy: editWhy,
       })
       .then((response) => {
         setUserFolder(response.data.data);
+        console.log(response.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -93,6 +113,9 @@ const QuestionCard = ({ folderId, reviewerId, index, question, answer }) => {
         <h3>Answer:</h3>
         <h3>{show}</h3>
         <button onClick={handleShow}>{buttonText}</button>
+      </div>
+      <div style={{ display: whyDisplay }}>
+        {localAnswer == "false" && <div><strong>Why: </strong> {localWhy} </div>}
       </div>
     </div>
   ) : (
@@ -129,6 +152,18 @@ const QuestionCard = ({ folderId, reviewerId, index, question, answer }) => {
           onClick={() => setEditAnswer("false")}
         />
         <label htmlFor="false">false</label>
+      </div>
+      <div>
+        
+        {editAnswer == "false" && (
+          <div>
+            <strong>Why:</strong> 
+            <input
+              value={editWhy}
+              onChange={(e) => setEditWhy(e.target.value)}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
