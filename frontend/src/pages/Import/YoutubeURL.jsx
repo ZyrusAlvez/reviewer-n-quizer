@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import FolderNaming from '../../component/FolderNaming.jsx'
+import FolderNaming from "../../component/top_level/FolderNaming";
 import axios from 'axios'
 
 const YoutubeURL = () => {

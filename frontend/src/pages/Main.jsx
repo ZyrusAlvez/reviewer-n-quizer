@@ -1,4 +1,4 @@
-import ChooseImport from "../component/main/ChooseImport.jsx";
+import ChooseImport from "../component/top_level/ChooseImport.jsx";
 import { useState} from "react";
 
 const Main = () => {

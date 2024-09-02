@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect } from 'react';
-import { UserDataContext } from '../context/userDataContext';
-import { UserFolderContext } from '../context/userFolderContext';
+import { UserDataContext } from '../../context/userDataContext.jsx';
+import { UserFolderContext } from '../../context/userFolderContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Loading from './Loading.jsx';
+import Loading from '../Loading.jsx';
 
 // fav part: loading will only appear when the material is still not loaded after the user typed the folder name
 const FolderNaming = ({ divFolderNamingDisplay, setDivFolderNamingDisplay, material }) => {

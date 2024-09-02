@@ -1,5 +1,5 @@
 import React from "react";
-import FolderNaming from "../../component/FolderNaming.jsx";
+import FolderNaming from "../../component/top_level/FolderNaming";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
