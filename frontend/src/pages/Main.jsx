@@ -29,9 +29,9 @@ const Main = () => {
       onClick={handleDivClick}
     >
       <button onClick={handleButtonClick}>
-        Import Material
+        Try it for Free
       </button>
-      <button onClick={() => localStorage.clear()}>Summarize</button>
+      {/* <button onClick={() => localStorage.clear()}>Summarize</button> */}
       <ChooseImport divImportDisplay={divImportDisplay} />
     </div>
   );

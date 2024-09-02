@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { UserFolderContext } from '../../context/userFolderContext';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { findReviewerId } from '../../utils/findReviewer';
 import axios from 'axios';
 
@@ -10,8 +10,10 @@ const AddTrueOrFalse = () => {
   const [why, setWhy] = useState("");
   const { userFolder, setUserFolder } = useContext(UserFolderContext);
   const { folderId } = useParams();
+  const navigate = useNavigate();
 
-  function handleSubmit() {
+  function handleSubmit(event) {
+    event.preventDefault(); // Prevents form from reloading the page
     axios
       .post("http://localhost:5000/api/folder/add-question", {
         userId: userFolder.userId,
@@ -21,16 +23,15 @@ const AddTrueOrFalse = () => {
       })
       .then((response) => {
         setUserFolder(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-    
-    // reset the state variables
-    setAnswer("true")
-    setQuestion("")
-    setWhy("")
+
+    // Reset the state variables
+    setAnswer("true");
+    setQuestion("");
+    setWhy("");
   }
 
   return (
@@ -40,26 +41,26 @@ const AddTrueOrFalse = () => {
         <input value={question} onChange={(e) => setQuestion(e.target.value)} />
       </div>
       <div>
-        <label htmlFor='answer'>Answer:</label>
-        <span id='answer'>
+        <label htmlFor="answer">Answer:</label>
+        <span id="answer">
           <input
-            id='true'
-            name='trueOrFalse'
-            type='radio'
+            id="true"
+            name="trueOrFalse"
+            type="radio"
             value="true"
             checked={answer === "true"}
             onChange={() => setAnswer("true")}
           />
-          <label htmlFor='true'>true</label>
+          <label htmlFor="true">true</label>
           <input
-            id='false'
-            name='trueOrFalse'
-            type='radio'
+            id="false"
+            name="trueOrFalse"
+            type="radio"
             value="false"
             checked={answer === "false"}
             onChange={() => setAnswer("false")}
           />
-          <label htmlFor='false'>false</label>
+          <label htmlFor="false">false</label>
         </span>
       </div>
       {answer === "false" && (
@@ -70,6 +71,7 @@ const AddTrueOrFalse = () => {
       )}
       <div>
         <button type="submit">Submit</button>
+        <button type="button" onClick={() => navigate(-1)}>Back</button>
       </div>
     </form>
   );
