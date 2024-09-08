@@ -3,8 +3,8 @@ import bg from '../component/mac_bg.png';
 import { useState } from "react";
 import Navbar from '../component/Navbar.jsx';
 import { FaFolderOpen } from "react-icons/fa";
-import perps1 from '../component/perps1.png'; // Correctly import the images
-import perps2 from '../component/perps2.png'; // Correctly import the images
+import perps1 from '../../assets/photos/perps1.png'; // Correctly import the images
+import perps2 from '../../assets/photos/perps2.png'; // Correctly import the images
 
 const Main = () => {
   const list = [<FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />];
