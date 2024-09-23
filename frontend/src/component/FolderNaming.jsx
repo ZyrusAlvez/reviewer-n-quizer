@@ -53,21 +53,13 @@ const FolderNaming = ({ divFolderNamingDisplay, setDivFolderNamingDisplay, mater
   }
 
   return (
-    <div
-      style={{
-        display: divFolderNamingDisplay,
-        height: '60vh',
-        width: '70vw',
-        position: 'absolute',
-        background: 'lightblue',
-      }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <h1>Name your reviewer</h1>
-      <input type='text' style={{ display: 'block' }} onChange={(e) => setInput(e.target.value)} />
-      <button onClick={() => setDivFolderNamingDisplay('none')}>Cancel</button>
-      <button onClick={submit} disabled={loading}>Submit</button>
-      <h6>This will help you to organize your reviewers later on</h6>
+    <div style={{display: divFolderNamingDisplay}} className="absolute h-[60vh] w-[70vw] bg-yellow-500 p-6 rounded-lg shadow-2xl flex flex-col justify-center items-center text-center" onClick={(e) => e.stopPropagation()}>
+      <h1 className="font-bold mt-10 ">Reviewer Name</h1>
+      <p className="text-white font-bold mb-10">This will help you to organize your reviewers later on</p>
+
+      <input type='text' style={{ display: 'block' }} className="w-full mx-auto text-center rounded h-[10%] shadow-2xl mb-8" onChange={(e) => setInput(e.target.value)} />
+      <button className="bg-gray-600 text-white mr-2 px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors" onClick={() => setDivFolderNamingDisplay('none')}>Cancel</button>
+      <button className="bg-gray-600 text-white ml-2 px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors" onClick={submit} disabled={loading}>Submit</button>
       {loading && <Loading />}
     </div>
   );

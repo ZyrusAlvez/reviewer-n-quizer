@@ -3,14 +3,14 @@ import bg from '../component/mac_bg.png';
 import { useState } from "react";
 import Navbar from '../component/Navbar.jsx';
 import { FaFolderOpen } from "react-icons/fa";
-import perps1 from '../../assets/photos/perps1.png'; // Correctly import the images
-import perps2 from '../../assets/photos/perps2.png'; // Correctly import the images
+import perps1 from '../component/perps1.png'; 
+import perps2 from '../component/perps2.png';
 
 const Main = () => {
   const list = [<FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />, <FaFolderOpen />];
   const slides = [
-    { url: perps1 }, // Use imported images
-    { url: perps2 }, // Use imported images
+    { url: perps1 }, 
+    { url: perps2 }, 
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -30,7 +30,7 @@ const Main = () => {
   };
 
   function handleButtonClick(e) {
-    e.stopPropagation(); // Prevent event propagation to parent div
+    e.stopPropagation(); 
     setDivImportDisplay("block");
     setIsGlassEffect(true);
   }
@@ -101,75 +101,54 @@ const Main = () => {
           </div>
         </div>
       </div>
+
       <div className="text-center">
         <h1 className="text-black font-bold text-5xl">Explore Confi</h1>
         <p className="text-black text-2xl font-extralight">Manage Files with tools.</p>
       </div>
 
       <div className="flex overflow-x-scroll space-x-4 p-4">
-        <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md " style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <p className="text-white p-4">hey</p>
-        <div className="w-[full] rounded-lg bg-stone-100 mt-[50%] h-[-10] flex justify-start">
+        {/* Card 1 */}
+        <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md" style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <p className="text-white p-4"></p>
+          <div className="w-full rounded-lg bg-stone-100 mt-[50%] h-auto flex justify-start">
             <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
-        <button className="overflow-visible text-5xl absolute top-[127%] left-[13%] mr-2 border-4 border-stone-800 bg-stone-100 w-[102px] h-[10%] rounded-[50%] hover:bg-stone-100 transition-colors duration-300">
-                <FaFolderOpen className="text-stone-800 ml-[30px] text-4xl hover:text-stone-500 transition-colors duration-300" />
-        </button>
-       </div>
-       
-      </div>
-      <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md " style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <p className="text-white p-4">hey</p>
-        <div className="w-[full] rounded-lg bg-stone-100 mt-[50%] h-[-10] flex justify-start">
-            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
-        <button className="overflow-visible text-5xl absolute top-[127%] left-[13%] mr-2 border-4 border-stone-800 bg-stone-100 w-[102px] h-[10%] rounded-[50%] hover:bg-stone-100 transition-colors duration-300">
-                <FaFolderOpen className="text-stone-800 ml-[30px] text-4xl hover:text-stone-500 transition-colors duration-300" />
-        </button>
-       </div>
-       
-      </div>
-      <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md " style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <p className="text-white p-4">hey</p>
-        <div className="w-[full] rounded-lg bg-stone-100 mt-[50%] h-[-10] flex justify-start">
-            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
-        <button className="overflow-visible text-5xl absolute top-[127%] left-[13%] mr-2 border-4 border-stone-800 bg-stone-100 w-[102px] h-[10%] rounded-[50%] hover:bg-stone-100 transition-colors duration-300">
-                <FaFolderOpen className="text-stone-800 ml-[30px] text-4xl hover:text-stone-500 transition-colors duration-300" />
-        </button>
-       </div>
-       
-      </div>
-      <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md " style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <p className="text-white p-4">hey</p>
-        <div className="w-[full] rounded-lg bg-stone-100 mt-[50%] h-[-10] flex justify-start">
-            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
-        <button className="overflow-visible text-5xl absolute top-[127%] left-[13%] mr-2 border-4 border-stone-800 bg-stone-100 w-[102px] h-[10%] rounded-[50%] hover:bg-stone-100 transition-colors duration-300">
-                <FaFolderOpen className="text-stone-800 ml-[30px] text-4xl hover:text-stone-500 transition-colors duration-300" />
-        </button>
-       </div>
-       
-      </div>
-      <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md " style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <p className="text-white p-4">hey</p>
-        <div className="w-[full] rounded-lg bg-stone-100 mt-[50%] h-[-10] flex justify-start">
-            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
-        <button className="overflow-visible text-5xl absolute top-[127%] left-[13%] mr-2 border-4 border-stone-800 bg-stone-100 w-[102px] h-[10%] rounded-[50%] hover:bg-stone-100 transition-colors duration-300">
-                <FaFolderOpen className="text-stone-800 ml-[30px] text-4xl hover:text-stone-500 transition-colors duration-300" />
-        </button>
-       </div>
-       
-      </div>
-      <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md " style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <p className="text-white p-4">hey</p>
-        <div className="w-[full] rounded-lg bg-stone-100 mt-[50%] h-[-10] flex justify-start">
-            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
-        <button className="overflow-visible text-5xl absolute top-[127%] left-[13%] mr-2 border-4 border-stone-800 bg-stone-100 w-[102px] h-[10%] rounded-[50%] hover:bg-stone-100 transition-colors duration-300">
-                <FaFolderOpen className="text-stone-800 ml-[30px] text-4xl hover:text-stone-500 transition-colors duration-300" />
-        </button>
-       </div>
-       
-      </div>
-      
-      
+          </div>
+        </div>
         
+        {/* Card 2 */}
+        <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md" style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <p className="text-white p-4"></p>
+          <div className="w-full rounded-lg bg-stone-100 mt-[50%] h-auto flex justify-start">
+            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
+          </div>
+        </div>
+        
+        {/* Card 3 */}
+        <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md" style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <p className="text-white p-4"></p>
+          <div className="w-full rounded-lg bg-stone-100 mt-[50%] h-auto flex justify-start">
+            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
+          </div>
+        </div>
+        <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md" style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <p className="text-white p-4"></p>
+          <div className="w-full rounded-lg bg-stone-100 mt-[50%] h-auto flex justify-start">
+            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
+          </div>
+        </div>
+        <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md" style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <p className="text-white p-4"></p>
+          <div className="w-full rounded-lg bg-stone-100 mt-[50%] h-auto flex justify-start">
+            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
+          </div>
+        </div>
+        <div className="w-[19%] h-3/4 bg-blue-500 flex-shrink-0 rounded-lg shadow-md" style={{ backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <p className="text-white p-4"></p>
+          <div className="w-full rounded-lg bg-stone-100 mt-[50%] h-auto flex justify-start">
+            <h1 className="text-black mt-[19%] mb-[10%] text-4xl font-bold">Upload Files</h1>
+          </div>
+        </div>
       </div>
     </div>
   );
