@@ -7,5 +7,6 @@ reviewerRouter.post("/flash-cards", reviewerController.flashCards)
 reviewerRouter.post("/fill-blanks", reviewerController.fillBlanks)
 reviewerRouter.post("/multiple-choices", reviewerController.multipleChoices)
 reviewerRouter.post("/true-or-false", reviewerController.trueOrFalse)
+reviewerRouter.post("/quiz", reviewerController.quiz)
 
 export default reviewerRouter

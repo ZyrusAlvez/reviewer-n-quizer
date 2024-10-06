@@ -31,10 +31,7 @@ function runAi (instruction, query, quiz_model){
 }
 
 const reviewerController = {
-  flashCards : runAi(reviewerModel.flashCards.systemInstruction, reviewerModel.flashCards.query, reviewerModel.flashCards.model),
-  fillBlanks : runAi(reviewerModel.fillBlanks.systemInstruction, reviewerModel.fillBlanks.query, reviewerModel.fillBlanks.model),
-  multipleChoices : runAi(reviewerModel.multipleChoices.systemInstruction, reviewerModel.multipleChoices.query, reviewerModel.multipleChoices.model),
-  trueOrFalse : runAi(reviewerModel.trueOrFalse.systemInstruction, reviewerModel.trueOrFalse.query, reviewerModel.trueOrFalse.model)
+  quiz: runAi(reviewerModel.quiz.systemInstruction, reviewerModel.quiz.query, reviewerModel.quiz.model)
 }
 
 export default reviewerController;
